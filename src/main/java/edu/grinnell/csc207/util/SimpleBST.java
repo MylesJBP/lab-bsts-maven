@@ -74,6 +74,19 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
   // | SimpleMap methods |
   // +-------------------+
 
+  public BSTNode<K,V> setHelper(K key, V value, BSTNode<K, V>curNode) {
+    if (curNode == null) {
+      return new BSTNode<K, V>(key, value);
+    } else if (this.order.compare(key, curNode.key) > 0) {
+      curNode.right = setHelper(key, value, curNode.right);
+    } else if (this.order.compare(key, curNode.key) < 0) {
+      curNode.left = setHelper(key, value, curNode.left); 
+    } else {
+      this.cachedValue = curNode.value;
+      curNode.value = value;
+    }
+  }
+
   /**
    * Set the value associated with key.
    *
@@ -89,7 +102,8 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    */
   @Override
   public V set(K key, V value) {
-    return null;        // STUB
+    this.root = setHelper(key, value, this.root);
+    return this.cachedValue;
   } // set(K, V)
 
   /**
